@@ -1,0 +1,76 @@
+/*
+Theme Name: Learnovation Hub
+Theme URI: https://example.com/learnovation-hub
+Author: Your Name
+Author URI: https://example.com
+Description: A WordPress theme for Learnovation Hub, retaining all aesthetics and functionality from the original React application.
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: learnovation-hub
+*/
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.site-header {
+  background-color: #333;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+.site-header .site-title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.site-header .site-description {
+  margin: 0;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.main-navigation {
+  margin-top: 1rem;
+}
+
+.main-navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.main-navigation a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.site-footer {
+  background-color: #333;
+  color: #fff;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.site-footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.site-content {
+  padding: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333;
+}
+
+p {
+  color: #666;
+}
