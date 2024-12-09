@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Learnovation Hub WordPress Theme
 
 ## Project info
 
@@ -54,16 +54,29 @@ npm run dev
 
 This project is built with .
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
+- WordPress
+- PHP
 - Tailwind CSS
 
-## How can I deploy this project?
+## How can I install and activate this WordPress theme?
 
-Simply open [Lovable](https://lovable.dev/projects/375c61bb-3019-4f6d-ac51-f901cc07a681) and click on Share -> Publish.
+Follow these steps to install and activate the Learnovation Hub WordPress theme:
 
-## I want to use a custom domain - is that possible?
+1. Download the theme files from the repository.
+2. Upload the theme files to your WordPress installation's `wp-content/themes` directory.
+3. Log in to your WordPress admin dashboard.
+4. Navigate to `Appearance > Themes`.
+5. Locate the Learnovation Hub theme and click `Activate`.
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Are these all the files necessary for a theme?
+
+The following files are included in the Learnovation Hub WordPress theme:
+
+- `index.php`: The main template file for the theme.
+- `header.php`: The header template file.
+- `footer.php`: The footer template file.
+- `functions.php`: The functions file for the theme.
+- `style.css`: The main stylesheet for the theme.
+- `screenshot.png`: A screenshot of the theme for WordPress theme recognition.
+
+If you have any questions or need further assistance, please refer to the WordPress documentation or contact the theme developer.
