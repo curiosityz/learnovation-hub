@@ -18,22 +18,9 @@ serve(async (req) => {
 
   try {
     if (!ZEPTOMAIL_PASSWORD) {
+      console.error('ZEPTOMAIL_PASSWORD environment variable is not set');
       throw new Error('ZEPTOMAIL_PASSWORD environment variable is not set');
     }
-
-    console.log('Initializing SMTP client...');
-    client = new SmtpClient();
-
-    const config = {
-      hostname: "smtp.zeptomail.com",
-      port: 587,
-      username: "emailapikey",
-      password: ZEPTOMAIL_PASSWORD,
-    };
-    
-    console.log('Connecting to ZeptoMail SMTP server with config:', { ...config, password: '[REDACTED]' });
-    await client.connectTLS(config);
-    console.log('Connected to ZeptoMail SMTP server successfully');
 
     const { type, email, name, message } = await req.json();
     console.log('Processing request for email type:', type);
@@ -45,9 +32,6 @@ serve(async (req) => {
       subject = "New Newsletter Subscription";
       emailContent = `
         <html>
-          <head>
-            <meta charset="utf-8">
-          </head>
           <body>
             <h1>New Newsletter Subscription</h1>
             <p>A new user has subscribed to the newsletter:</p>
@@ -58,9 +42,6 @@ serve(async (req) => {
       subject = "New Contact Form Submission";
       emailContent = `
         <html>
-          <head>
-            <meta charset="utf-8">
-          </head>
           <body>
             <h1>New Contact Form Submission</h1>
             <p><strong>Name:</strong> ${name}</p>
@@ -73,24 +54,34 @@ serve(async (req) => {
       throw new Error('Invalid email type');
     }
 
-    console.log('Preparing to send email via ZeptoMail...');
+    console.log('Initializing SMTP client...');
+    client = new SmtpClient();
+
+    const config = {
+      hostname: "smtp.zeptomail.com",
+      port: 587,
+      username: "emailapikey",
+      password: ZEPTOMAIL_PASSWORD,
+      tls: true,
+      timeout: 30000, // 30 second timeout
+    };
+    
+    console.log('Connecting to SMTP server...');
+    await client.connectTLS(config);
+    console.log('SMTP connection established');
+
+    console.log('Preparing to send email...');
     const emailConfig = {
       from: "noreply@teachoneself.com",
       to: "z@teachoneself.com",
       subject: subject,
-      html: emailContent,
+      content: emailContent,
+      html: true,
     };
-    console.log('Email configuration prepared:', { ...emailConfig, html: '[HTML Content]' });
 
-    console.log('Sending email through ZeptoMail...');
+    console.log('Sending email...');
     await client.send(emailConfig);
-    console.log('Email sent successfully via ZeptoMail');
-
-    if (client) {
-      console.log('Closing ZeptoMail SMTP connection...');
-      await client.close();
-      console.log('ZeptoMail SMTP connection closed successfully');
-    }
+    console.log('Email sent successfully');
 
     return new Response(
       JSON.stringify({ success: true }),
@@ -99,19 +90,10 @@ serve(async (req) => {
         status: 200 
       }
     );
-  } catch (error) {
-    console.error('ZeptoMail email sending error:', error);
-    
-    if (client) {
-      try {
-        console.log('Attempting to close ZeptoMail SMTP connection after error...');
-        await client.close();
-        console.log('ZeptoMail SMTP connection closed successfully after error');
-      } catch (closeError) {
-        console.error('Error closing ZeptoMail SMTP connection:', closeError);
-      }
-    }
 
+  } catch (error) {
+    console.error('Error details:', error);
+    
     return new Response(
       JSON.stringify({ 
         error: error.message,
@@ -122,5 +104,15 @@ serve(async (req) => {
         status: 500 
       }
     );
+  } finally {
+    if (client) {
+      try {
+        console.log('Closing SMTP connection...');
+        await client.close();
+        console.log('SMTP connection closed');
+      } catch (closeError) {
+        console.error('Error closing SMTP connection:', closeError);
+      }
+    }
   }
 });
