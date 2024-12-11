@@ -14,9 +14,12 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const client = new SmtpClient();
+  let client: SmtpClient | null = null;
 
   try {
+    console.log('Initializing SMTP client...');
+    client = new SmtpClient();
+
     console.log('Connecting to SMTP server...');
     await client.connectTLS({
       hostname: "smtp.zeptomail.com",
@@ -27,7 +30,7 @@ serve(async (req) => {
     console.log('Connected to SMTP server successfully');
 
     const { type, email, name, message } = await req.json();
-    console.log('Received request data:', { type, email, name });
+    console.log('Processing request for email type:', type);
     
     let emailContent;
     let subject;
@@ -35,42 +38,55 @@ serve(async (req) => {
     if (type === 'subscription') {
       subject = "New Newsletter Subscription";
       emailContent = `
-        <html>
-          <body>
-            <h1>New Newsletter Subscription</h1>
-            <p>A new user has subscribed to the newsletter:</p>
-            <p>Email: ${email}</p>
-          </body>
-        </html>
-      `;
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <h1>New Newsletter Subscription</h1>
+    <p>A new user has subscribed to the newsletter:</p>
+    <p><strong>Email:</strong> ${email}</p>
+  </body>
+</html>`;
     } else if (type === 'contact') {
       subject = "New Contact Form Submission";
       emailContent = `
-        <html>
-          <body>
-            <h1>New Contact Form Submission</h1>
-            <p>Name: ${name}</p>
-            <p>Email: ${email}</p>
-            <p>Message:</p>
-            <p>${message}</p>
-          </body>
-        </html>
-      `;
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <h1>New Contact Form Submission</h1>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Message:</strong></p>
+    <p>${message}</p>
+  </body>
+</html>`;
     } else {
       throw new Error('Invalid email type');
     }
 
-    console.log('Sending email...');
-    await client.send({
+    console.log('Preparing to send email...');
+    const emailConfig = {
       from: "noreply@teachoneself.com",
       to: "z@teachoneself.com",
       subject: subject,
       html: emailContent,
-    });
+    };
+    console.log('Email configuration prepared:', { ...emailConfig, html: '[HTML Content]' });
+
+    console.log('Sending email...');
+    await client.send(emailConfig);
     console.log('Email sent successfully');
 
-    await client.close();
-    console.log('SMTP connection closed');
+    if (client) {
+      console.log('Closing SMTP connection...');
+      await client.close();
+      console.log('SMTP connection closed successfully');
+    }
 
     return new Response(
       JSON.stringify({ success: true }),
@@ -82,15 +98,21 @@ serve(async (req) => {
   } catch (error) {
     console.error('Email sending error:', error);
     
-    try {
-      await client.close();
-      console.log('SMTP connection closed after error');
-    } catch (closeError) {
-      console.error('Error closing SMTP connection:', closeError);
+    if (client) {
+      try {
+        console.log('Attempting to close SMTP connection after error...');
+        await client.close();
+        console.log('SMTP connection closed successfully after error');
+      } catch (closeError) {
+        console.error('Error closing SMTP connection:', closeError);
+      }
     }
 
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.toString()
+      }),
       { 
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500 
