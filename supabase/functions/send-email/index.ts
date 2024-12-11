@@ -17,17 +17,22 @@ serve(async (req) => {
   let client: SmtpClient | null = null;
 
   try {
+    if (!ZEPTOMAIL_PASSWORD) {
+      throw new Error('ZEPTOMAIL_PASSWORD environment variable is not set');
+    }
+
     console.log('Initializing SMTP client...');
     client = new SmtpClient();
 
-    console.log('Connecting to ZeptoMail SMTP server...');
-    await client.connectTLS({
+    const config = {
       hostname: "smtp.zeptomail.com",
       port: 587,
       username: "emailapikey",
       password: ZEPTOMAIL_PASSWORD,
-      tls: true,
-    });
+    };
+    
+    console.log('Connecting to ZeptoMail SMTP server with config:', { ...config, password: '[REDACTED]' });
+    await client.connectTLS(config);
     console.log('Connected to ZeptoMail SMTP server successfully');
 
     const { type, email, name, message } = await req.json();
@@ -39,33 +44,31 @@ serve(async (req) => {
     if (type === 'subscription') {
       subject = "New Newsletter Subscription";
       emailContent = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-  </head>
-  <body>
-    <h1>New Newsletter Subscription</h1>
-    <p>A new user has subscribed to the newsletter:</p>
-    <p><strong>Email:</strong> ${email}</p>
-  </body>
-</html>`;
+        <html>
+          <head>
+            <meta charset="utf-8">
+          </head>
+          <body>
+            <h1>New Newsletter Subscription</h1>
+            <p>A new user has subscribed to the newsletter:</p>
+            <p><strong>Email:</strong> ${email}</p>
+          </body>
+        </html>`;
     } else if (type === 'contact') {
       subject = "New Contact Form Submission";
       emailContent = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-  </head>
-  <body>
-    <h1>New Contact Form Submission</h1>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Message:</strong></p>
-    <p>${message}</p>
-  </body>
-</html>`;
+        <html>
+          <head>
+            <meta charset="utf-8">
+          </head>
+          <body>
+            <h1>New Contact Form Submission</h1>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+          </body>
+        </html>`;
     } else {
       throw new Error('Invalid email type');
     }
