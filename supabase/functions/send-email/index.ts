@@ -1,13 +1,23 @@
-import { serve } from "https://deno.fresh.dev/std@v9.6.1/http/server.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { MailerSend, EmailParams, Sender, Recipient } from "npm:mailersend";
 
 const MAILERSEND_API_KEY = Deno.env.get('MAILERSEND_API_KEY') || '';
 const mailerSend = new MailerSend({ apiKey: MAILERSEND_API_KEY });
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
 const sender = new Sender("noreply@teachoneself.com", "Teach Oneself");
 const recipient = new Recipient("z@teachoneself.com", "Teach Oneself Team");
 
 serve(async (req) => {
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   try {
     const { type, email, name, message } = await req.json();
     
@@ -46,7 +56,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ success: true }),
       { 
-        headers: { "Content-Type": "application/json" },
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200 
       }
     );
@@ -55,7 +65,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ error: error.message }),
       { 
-        headers: { "Content-Type": "application/json" },
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500 
       }
     );
