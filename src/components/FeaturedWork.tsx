@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 const projects = [
   {
@@ -62,23 +63,27 @@ export const FeaturedWork = () => {
                 <span className="text-primary font-medium mb-2">{project.category}</span>
                 <h3 className="text-xl font-bold mb-2">{project.title}</h3>
                 <p className="text-gray-300 mb-4">{project.description}</p>
-                <Button
-                  variant="outline"
-                  className="w-fit opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  View Project
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to="/work">
+                  <Button
+                    variant="outline"
+                    className="w-fit opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  >
+                    View Project
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Button size="lg" variant="outline">
-            View All Projects
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/work">
+            <Button size="lg" variant="outline">
+              View All Projects
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

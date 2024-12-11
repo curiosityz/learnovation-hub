@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Calendar } from "lucide-react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 const posts = [
   {
@@ -76,10 +77,12 @@ export const BlogInsights = () => {
                     {post.title}
                   </h3>
                   <p className="text-gray-400 mb-4">{post.excerpt}</p>
-                  <Button variant="ghost" className="group-hover:text-primary">
-                    Read More
-                    <BookOpen className="ml-2 w-4 h-4" />
-                  </Button>
+                  <Link to="/blog">
+                    <Button variant="ghost" className="group-hover:text-primary">
+                      Read More
+                      <BookOpen className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
                 </div>
               </Card>
             </motion.div>
