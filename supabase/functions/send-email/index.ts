@@ -20,14 +20,15 @@ serve(async (req) => {
     console.log('Initializing SMTP client...');
     client = new SmtpClient();
 
-    console.log('Connecting to SMTP server...');
+    console.log('Connecting to ZeptoMail SMTP server...');
     await client.connectTLS({
       hostname: "smtp.zeptomail.com",
       port: 587,
       username: "emailapikey",
       password: ZEPTOMAIL_PASSWORD,
+      tls: true,
     });
-    console.log('Connected to SMTP server successfully');
+    console.log('Connected to ZeptoMail SMTP server successfully');
 
     const { type, email, name, message } = await req.json();
     console.log('Processing request for email type:', type);
@@ -69,7 +70,7 @@ serve(async (req) => {
       throw new Error('Invalid email type');
     }
 
-    console.log('Preparing to send email...');
+    console.log('Preparing to send email via ZeptoMail...');
     const emailConfig = {
       from: "noreply@teachoneself.com",
       to: "z@teachoneself.com",
@@ -78,14 +79,14 @@ serve(async (req) => {
     };
     console.log('Email configuration prepared:', { ...emailConfig, html: '[HTML Content]' });
 
-    console.log('Sending email...');
+    console.log('Sending email through ZeptoMail...');
     await client.send(emailConfig);
-    console.log('Email sent successfully');
+    console.log('Email sent successfully via ZeptoMail');
 
     if (client) {
-      console.log('Closing SMTP connection...');
+      console.log('Closing ZeptoMail SMTP connection...');
       await client.close();
-      console.log('SMTP connection closed successfully');
+      console.log('ZeptoMail SMTP connection closed successfully');
     }
 
     return new Response(
@@ -96,15 +97,15 @@ serve(async (req) => {
       }
     );
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('ZeptoMail email sending error:', error);
     
     if (client) {
       try {
-        console.log('Attempting to close SMTP connection after error...');
+        console.log('Attempting to close ZeptoMail SMTP connection after error...');
         await client.close();
-        console.log('SMTP connection closed successfully after error');
+        console.log('ZeptoMail SMTP connection closed successfully after error');
       } catch (closeError) {
-        console.error('Error closing SMTP connection:', closeError);
+        console.error('Error closing ZeptoMail SMTP connection:', closeError);
       }
     }
 
