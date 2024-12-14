@@ -13,6 +13,8 @@ import { CallToAction } from "@/components/CallToAction";
 import { DynamicNav } from "@/components/DynamicNav";
 
 const Index = () => {
+  console.log("Index component rendering"); // Adding console log to track rendering
+
   return (
     <div className="min-h-screen bg-accent text-white">
       <DynamicNav />

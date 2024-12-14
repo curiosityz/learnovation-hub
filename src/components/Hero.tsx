@@ -3,9 +3,11 @@ import { Button } from "./ui/button";
 import { useEffect, useRef } from "react";
 
 export const Hero = () => {
+  console.log("Hero component rendering"); // Adding console log to track rendering
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log("Hero component mounted"); // Adding console log to track mounting
     const handleScroll = () => {
       if (!heroRef.current) return;
       const scrolled = window.scrollY;
