@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "./", // Changed from "/learnovation-hub/" to "./" for relative paths
+  base: "/learnovation-hub/", // Changed back to /learnovation-hub/ for GitHub Pages
   server: {
     host: "::",
     port: 8080,
