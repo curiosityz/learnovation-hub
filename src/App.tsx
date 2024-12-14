@@ -11,13 +11,14 @@ import { useState } from "react";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
+  console.log("App component rendering"); // Adding console log
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename="/learnovation-hub">
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/work" element={<Work />} />
