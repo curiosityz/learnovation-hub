@@ -12,13 +12,16 @@ import { useState } from "react";
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
   console.log("App component rendering"); // Adding console log
+  
+  // Use base URL from Vite config for proper environment handling
+  const basename = import.meta.env.MODE === 'production' ? '/learnovation-hub' : '/';
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename="/learnovation-hub">
+        <BrowserRouter basename={basename}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/work" element={<Work />} />
