@@ -27,7 +27,7 @@ const Resources = () => {
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Resource cards will go here */}
+            {/* Resource cards will be implemented here */}
             <div className="bg-accent/50 rounded-lg p-8 border border-primary/10">
               <h2 className="text-xl font-semibold mb-4">Coming Soon</h2>
               <p className="text-gray-400">Resources will be available shortly.</p>
