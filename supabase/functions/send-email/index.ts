@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 
-const ZEPTOMAIL_PASSWORD = Deno.env.get('ZEPTOMAIL_PASSWORD') || '';
+const ZEPTOMAIL_API_URL = "https://api.zeptomail.com/v1.1/email";
+const ZEPTOMAIL_TOKEN = Deno.env.get('ZEPTOMAIL_TOKEN') || '';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,12 +19,10 @@ serve(async (req) => {
     });
   }
 
-  let client: SmtpClient | null = null;
-
   try {
-    if (!ZEPTOMAIL_PASSWORD) {
-      console.error('ZEPTOMAIL_PASSWORD environment variable is not set');
-      throw new Error('ZEPTOMAIL_PASSWORD environment variable is not set');
+    if (!ZEPTOMAIL_TOKEN) {
+      console.error('ZEPTOMAIL_TOKEN environment variable is not set');
+      throw new Error('ZEPTOMAIL_TOKEN environment variable is not set');
     }
 
     const { type, email, name, message } = await req.json();
@@ -36,60 +34,61 @@ serve(async (req) => {
     if (type === 'subscription') {
       subject = "New Newsletter Subscription";
       emailContent = `
-        <html>
-          <body>
-            <h1>New Newsletter Subscription</h1>
-            <p>A new user has subscribed to the newsletter:</p>
-            <p><strong>Email:</strong> ${email}</p>
-          </body>
-        </html>`;
+        <div>
+          <h1>New Newsletter Subscription</h1>
+          <p>A new user has subscribed to the newsletter:</p>
+          <p><strong>Email:</strong> ${email}</p>
+        </div>`;
     } else if (type === 'contact') {
       subject = "New Contact Form Submission";
       emailContent = `
-        <html>
-          <body>
-            <h1>New Contact Form Submission</h1>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message}</p>
-          </body>
-        </html>`;
+        <div>
+          <h1>New Contact Form Submission</h1>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message}</p>
+        </div>`;
     } else {
       throw new Error('Invalid email type');
     }
 
-    console.log('Initializing SMTP client...');
-    client = new SmtpClient();
-
-    const config = {
-      hostname: "smtp.zeptomail.com",
-      port: 587,
-      username: "emailapikey",
-      password: ZEPTOMAIL_PASSWORD,
-      tls: true,
-      timeout: 30000, // 30 second timeout
-    };
-    
-    console.log('Connecting to SMTP server...');
-    await client.connectTLS(config);
-    console.log('SMTP connection established');
-
-    console.log('Preparing to send email...');
-    const emailConfig = {
-      from: "noreply@teachoneself.com",
-      to: "z@teachoneself.com",
+    const payload = {
+      from: { 
+        address: "noreply@teachoneself.com"
+      },
+      to: [{
+        email_address: {
+          address: "z@teachoneself.com",
+          name: "Zachary"
+        }
+      }],
       subject: subject,
-      content: emailContent,
-      html: true,
+      htmlbody: emailContent
     };
 
-    console.log('Sending email...');
-    await client.send(emailConfig);
-    console.log('Email sent successfully');
+    console.log('Sending email to ZeptoMail API...');
+    const response = await fetch(ZEPTOMAIL_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Zoho-enczapikey ${ZEPTOMAIL_TOKEN}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('ZeptoMail API error:', errorText);
+      throw new Error(`ZeptoMail API error: ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log('Email sent successfully:', result);
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({ success: true, result }),
       { 
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200 
@@ -109,15 +108,5 @@ serve(async (req) => {
         status: 500 
       }
     );
-  } finally {
-    if (client) {
-      try {
-        console.log('Closing SMTP connection...');
-        await client.close();
-        console.log('SMTP connection closed');
-      } catch (closeError) {
-        console.error('Error closing SMTP connection:', closeError);
-      }
-    }
   }
 });
