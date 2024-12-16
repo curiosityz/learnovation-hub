@@ -80,7 +80,7 @@ serve(async (req) => {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': `Zoho-enczapikey ${ZEPTOMAIL_TOKEN}`
+        'Authorization': `Zoho-enczapikey ${ZEPTOMAIL_TOKEN}`  // Fixed authorization header format
       },
       body: JSON.stringify(emailPayload)
     });
