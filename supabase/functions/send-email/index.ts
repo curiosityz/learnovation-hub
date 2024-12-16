@@ -1,7 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { SendMailClient } from "npm:zeptomail";
 
 const ZEPTOMAIL_TOKEN = Deno.env.get('ZEPTOMAIL_TOKEN');
-const ZEPTOMAIL_API_URL = "https://api.zeptomail.com/v1.1/email";
+const ZEPTOMAIL_API_URL = "api.zeptomail.com/";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -27,12 +28,18 @@ serve(async (req) => {
     const { type, email, name, message } = await req.json();
     console.log('Processing request for email type:', type);
     
+    const client = new SendMailClient({
+      url: ZEPTOMAIL_API_URL,
+      token: ZEPTOMAIL_TOKEN
+    });
+    
     let emailPayload;
     
     if (type === 'subscription') {
       emailPayload = {
-        from: { 
-          address: "noreply@teachoneself.com"
+        from: {
+          address: "noreply@teachoneself.com",
+          name: "Teach Oneself"
         },
         to: [{
           email_address: {
@@ -50,8 +57,9 @@ serve(async (req) => {
       };
     } else if (type === 'contact') {
       emailPayload = {
-        from: { 
-          address: "noreply@teachoneself.com"
+        from: {
+          address: "noreply@teachoneself.com",
+          name: "Teach Oneself"
         },
         to: [{
           email_address: {
@@ -75,32 +83,21 @@ serve(async (req) => {
 
     console.log('Sending email with payload:', JSON.stringify(emailPayload));
 
-    const response = await fetch(ZEPTOMAIL_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Zoho-enczapikey ${ZEPTOMAIL_TOKEN}`  // Fixed authorization header format
-      },
-      body: JSON.stringify(emailPayload)
-    });
+    try {
+      const response = await client.sendMail(emailPayload);
+      console.log('Email sent successfully:', response);
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('ZeptoMail API error:', errorText);
-      throw new Error(`ZeptoMail API error: ${errorText}`);
+      return new Response(
+        JSON.stringify({ success: true, result: response }),
+        { 
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200 
+        }
+      );
+    } catch (emailError) {
+      console.error('ZeptoMail API error:', emailError);
+      throw new Error(`ZeptoMail API error: ${JSON.stringify(emailError)}`);
     }
-
-    const result = await response.json();
-    console.log('Email sent successfully:', result);
-
-    return new Response(
-      JSON.stringify({ success: true, result }),
-      { 
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200 
-      }
-    );
 
   } catch (error) {
     console.error('Error in send-email function:', error);
