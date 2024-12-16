@@ -7,13 +7,13 @@ import Index from "./pages/Index";
 import Work from "./pages/Work";
 import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import { useState } from "react";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
-  console.log("App component rendering"); // Adding console log
+  console.log("App component rendering");
   
-  // Use base URL from Vite config for proper environment handling
   const basename = import.meta.env.MODE === 'production' ? '/learnovation-hub' : '/';
 
   return (
@@ -27,6 +27,7 @@ const App = () => {
             <Route path="/work" element={<Work />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

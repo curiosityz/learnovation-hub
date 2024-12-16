@@ -1,42 +1,37 @@
-import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { BlogListTemplate } from "@/components/templates/BlogListTemplate";
+
+const posts = [
+  {
+    id: "1",
+    title: "The Future of Digital Innovation",
+    excerpt: "Exploring emerging trends and technologies shaping the digital landscape",
+    date: "Mar 15, 2024",
+    category: "Innovation",
+    image: "/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png",
+    slug: "future-of-digital-innovation"
+  },
+  {
+    id: "2",
+    title: "Building Learning Organizations",
+    excerpt: "Strategies for fostering a culture of continuous learning and growth",
+    date: "Mar 12, 2024",
+    category: "Leadership",
+    image: "/lovable-uploads/cc7e3933-325f-45b1-9798-ed58f18bf45d.png",
+    slug: "building-learning-organizations"
+  },
+  {
+    id: "3",
+    title: "Strategic Digital Marketing",
+    excerpt: "Leveraging data-driven insights for impactful marketing campaigns",
+    date: "Mar 10, 2024",
+    category: "Marketing",
+    image: "/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png",
+    slug: "strategic-digital-marketing"
+  }
+];
 
 const Blog = () => {
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-24">
-        <Link to="/">
-          <Button variant="ghost" className="mb-8">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Button>
-        </Link>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-            Blog Insights
-          </h1>
-          <p className="text-xl text-gray-300 mb-12">
-            Explore our latest thoughts on innovation, strategy, and digital transformation.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Blog posts will be implemented here */}
-            <div className="bg-accent/50 rounded-lg p-8 border border-primary/10">
-              <h2 className="text-xl font-semibold mb-4">Coming Soon</h2>
-              <p className="text-gray-400">New articles will be published soon.</p>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  );
+  return <BlogListTemplate posts={posts} />;
 };
 
 export default Blog;

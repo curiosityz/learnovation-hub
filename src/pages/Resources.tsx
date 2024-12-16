@@ -1,41 +1,46 @@
-import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { PageTemplate } from "@/components/templates/PageTemplate";
+import { Card } from "@/components/ui/card";
+import { Book, Video, FileText, Users } from "lucide-react";
 
 const Resources = () => {
+  const resources = [
+    {
+      icon: Book,
+      title: "Guides & Frameworks",
+      description: "Comprehensive resources for digital transformation and growth"
+    },
+    {
+      icon: Video,
+      title: "Video Content",
+      description: "Expert insights and tutorials on innovation and strategy"
+    },
+    {
+      icon: FileText,
+      title: "Case Studies",
+      description: "Real-world examples of successful digital initiatives"
+    },
+    {
+      icon: Users,
+      title: "Community",
+      description: "Connect with fellow innovators and industry leaders"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-24">
-        <Link to="/">
-          <Button variant="ghost" className="mb-8">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Button>
-        </Link>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-            Resource Hub
-          </h1>
-          <p className="text-xl text-gray-300 mb-12">
-            Access valuable insights and tools to accelerate your digital journey.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Resource cards will be implemented here */}
-            <div className="bg-accent/50 rounded-lg p-8 border border-primary/10">
-              <h2 className="text-xl font-semibold mb-4">Coming Soon</h2>
-              <p className="text-gray-400">Resources will be available shortly.</p>
-            </div>
-          </div>
-        </motion.div>
+    <PageTemplate 
+      title="Resource Hub"
+      description="Access valuable insights and tools to accelerate your digital journey."
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {resources.map((resource) => (
+          <Card key={resource.title} className="p-6 bg-white/5 backdrop-blur-sm border-primary/10 hover:border-primary/30 transition-all duration-300 group">
+            <resource.icon className="h-12 w-12 text-primary mb-4 transition-transform duration-300 group-hover:scale-110" />
+            <h3 className="text-xl font-semibold mb-3">{resource.title}</h3>
+            <p className="text-gray-400">{resource.description}</p>
+          </Card>
+        ))}
       </div>
-    </div>
+    </PageTemplate>
   );
 };
 
