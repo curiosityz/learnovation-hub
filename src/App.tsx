@@ -15,6 +15,8 @@ const App = () => {
   console.log("App component rendering");
   
   const basename = import.meta.env.MODE === 'production' ? '/learnovation-hub' : '/';
+  console.log("Using basename:", basename);
+  console.log("Current mode:", import.meta.env.MODE);
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -4,6 +4,15 @@ import path from "path";
 
 export default defineConfig(({ mode }) => ({
   base: mode === 'production' ? "/learnovation-hub/" : "/",
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
   server: {
     host: "::",
     port: 8080,
