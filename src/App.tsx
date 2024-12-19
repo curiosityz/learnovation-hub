@@ -2,13 +2,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, ScrollRestoration } from "react-router-dom";
 import Index from "./pages/Index";
 import Work from "./pages/Work";
 import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const App = ({ basename }) => {
   const [queryClient] = useState(() => new QueryClient());
@@ -20,6 +20,7 @@ const App = ({ basename }) => {
         <Toaster />
         <Sonner />
         <BrowserRouter basename={basename}>
+          <ScrollRestoration />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/work" element={<Work />} />

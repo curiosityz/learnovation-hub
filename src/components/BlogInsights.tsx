@@ -10,21 +10,24 @@ const posts = [
     excerpt: "Exploring emerging trends and technologies shaping the digital landscape",
     date: "Mar 15, 2024",
     category: "Innovation",
-    image: "/public/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png"
+    slug: "future-of-digital-innovation",
+    image: "/learnovation-hub/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png"
   },
   {
     title: "Building Learning Organizations",
     excerpt: "Strategies for fostering a culture of continuous learning and growth",
     date: "Mar 12, 2024",
     category: "Leadership",
-    image: "/public/lovable-uploads/cc7e3933-325f-45b1-9798-ed58f18bf45d.png"
+    slug: "building-learning-organizations",
+    image: "/learnovation-hub/lovable-uploads/cc7e3933-325f-45b1-9798-ed58f18bf45d.png"
   },
   {
     title: "Strategic Digital Marketing",
     excerpt: "Leveraging data-driven insights for impactful marketing campaigns",
     date: "Mar 10, 2024",
     category: "Marketing",
-    image: "/public/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png"
+    slug: "strategic-digital-marketing",
+    image: "/learnovation-hub/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png"
   }
 ];
 
@@ -77,7 +80,7 @@ export const BlogInsights = () => {
                     {post.title}
                   </h3>
                   <p className="text-gray-400 mb-4">{post.excerpt}</p>
-                  <Link to="/blog">
+                  <Link to={`/blog/${post.slug}`}>
                     <Button variant="ghost" className="group-hover:text-primary">
                       Read More
                       <BookOpen className="ml-2 w-4 h-4" />
