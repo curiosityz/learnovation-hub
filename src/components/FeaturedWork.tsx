@@ -7,19 +7,19 @@ const projects = [
   {
     title: "Digital Transformation",
     category: "Strategy & Innovation",
-    image: "/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png",
+    image: "/learnovation-hub/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png",
     description: "Revolutionizing business processes through innovative digital solutions"
   },
   {
     title: "Brand Evolution",
     category: "Creative Design",
-    image: "/lovable-uploads/cc7e3933-325f-45b1-9798-ed58f18bf45d.png",
+    image: "/learnovation-hub/lovable-uploads/cc7e3933-325f-45b1-9798-ed58f18bf45d.png",
     description: "Crafting compelling brand identities that resonate and inspire"
   },
   {
     title: "Growth Acceleration",
     category: "Marketing & Strategy",
-    image: "/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png",
+    image: "/learnovation-hub/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png",
     description: "Driving sustainable growth through data-driven strategies"
   }
 ];

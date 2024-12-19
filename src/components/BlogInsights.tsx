@@ -24,7 +24,7 @@ const posts = [
     excerpt: "Leveraging data-driven insights for impactful marketing campaigns",
     date: "Mar 10, 2024",
     category: "Marketing",
-    image: "/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png"
+    image: "/public/lovable-uploads/0750354a-c138-4cb0-ad18-2dff06d6e857.png"
   }
 ];
 

@@ -2,19 +2,17 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import Work from "./pages/Work";
 import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const App = () => {
+const App = ({ basename }) => {
   const [queryClient] = useState(() => new QueryClient());
-  console.log("App component rendering");
-  
-  const basename = import.meta.env.MODE === 'production' ? '/learnovation-hub' : '/';
+  console.log("App rendering with basename:", basename);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -28,6 +26,7 @@ const App = () => {
             <Route path="/resources" element={<Resources />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
