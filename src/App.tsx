@@ -13,6 +13,8 @@ import { useState } from "react";
 const App = ({ basename }) => {
   const [queryClient] = useState(() => new QueryClient());
   console.log("App rendering with basename:", basename);
+  console.log("Current pathname:", window.location.pathname);
+  console.log("Full URL:", window.location.href);
 
   return (
     <QueryClientProvider client={queryClient}>
