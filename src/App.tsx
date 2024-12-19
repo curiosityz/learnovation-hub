@@ -8,15 +8,19 @@ import Work from "./pages/Work";
 import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
-  console.log("App component rendering");
+  const [basename, setBasename] = useState('/');
   
-  const basename = import.meta.env.MODE === 'production' ? '/learnovation-hub' : '/';
-  console.log("Using basename:", basename);
-  console.log("Current mode:", import.meta.env.MODE);
+  useEffect(() => {
+    const isProduction = import.meta.env.MODE === 'production';
+    const base = isProduction ? '/learnovation-hub' : '/';
+    console.log("Current environment mode:", import.meta.env.MODE);
+    console.log("Using basename:", base);
+    setBasename(base);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

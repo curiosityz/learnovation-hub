@@ -8,6 +8,19 @@
     <meta name="author" content="Lovable" />
     <meta property="og:image" content="/og-image.png" />
     <base href="/" />
+    <script type="text/javascript">
+      // Handle GitHub Pages SPA routing
+      (function() {
+        const { pathname } = window.location;
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        const base = isGitHubPages ? '/learnovation-hub' : '';
+        
+        if (isGitHubPages && pathname !== base + '/404.html') {
+          localStorage.setItem('path', pathname);
+          window.location.href = base + '/404.html';
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
