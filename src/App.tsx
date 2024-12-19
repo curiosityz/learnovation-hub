@@ -10,17 +10,8 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import { useState, useEffect } from "react";
 
-const App = () => {
+const App = ({ basename }) => {
   const [queryClient] = useState(() => new QueryClient());
-  const [basename, setBasename] = useState('/');
-  
-  useEffect(() => {
-    const isProduction = import.meta.env.MODE === 'production';
-    const base = isProduction ? '/learnovation-hub' : '/';
-    console.log("Current environment mode:", import.meta.env.MODE);
-    console.log("Using basename:", base);
-    setBasename(base);
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
