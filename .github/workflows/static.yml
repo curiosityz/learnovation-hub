@@ -46,6 +46,7 @@ jobs:
       - name: Build
         run: |
           echo "VITE_MODE=production" >> .env
+          echo "VITE_BASE=/learnovation-hub/" >> .env
           npm run build
         env:
           NODE_ENV: production
