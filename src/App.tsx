@@ -10,7 +10,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import { useState } from "react";
 
-const App = ({ basename }) => {
+const App = ({ basename }: { basename: string }) => {
   const [queryClient] = useState(() => new QueryClient());
   console.log("App rendering with basename:", basename);
   console.log("Current pathname:", window.location.pathname);
@@ -19,8 +19,6 @@ const App = ({ basename }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
         <BrowserRouter basename={basename}>
           <ScrollRestoration />
           <Routes>
@@ -31,6 +29,8 @@ const App = ({ basename }) => {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          <Toaster />
+          <Sonner />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

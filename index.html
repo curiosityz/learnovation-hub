@@ -11,7 +11,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
+    <script type="module">
       // GitHub Pages SPA redirect handling
       (function(l) {
         if (l.search[1] === '/' ) {
@@ -25,10 +25,10 @@
       }(window.location))
 
       // Dynamically update the base URL based on the environment
-      const isProduction = import.meta.env.MODE === 'production';
+      const isProduction = window.location.hostname !== 'localhost';
       const base = isProduction ? '/learnovation-hub/' : '/';
       document.getElementById('dynamic-base').setAttribute('href', base);
     </script>
-    <script type="module" src="./src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
