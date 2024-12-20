@@ -4,10 +4,10 @@ import path from "path";
 
 export default defineConfig(({ mode }) => {
   console.log("Vite build mode:", mode);
-  console.log("Base URL:", mode === 'production' ? "/learnovation-hub/" : "/");
+  console.log("Base URL:", mode === 'production' ? "/" : "/");
   
   return {
-    base: mode === 'production' ? "/learnovation-hub/" : "/",
+    base: mode === 'production' ? "/" : "/",
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
